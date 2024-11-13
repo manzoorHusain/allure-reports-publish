@@ -1,0 +1,1 @@
+Publish allure reports on githup actions
