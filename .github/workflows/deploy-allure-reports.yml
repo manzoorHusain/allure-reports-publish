@@ -49,7 +49,7 @@ jobs:
 
       - name: Run tests and generate Allure report
         run: |
-          pytest test/test_example --alluredir=allure-results  # Run tests and generate Allure results
+          pytest tests/test_example --alluredir=allure-results  # Run tests and generate Allure results
           allure generate allure-results --clean -o allure-report  # Generate the Allure report
         shell: bash
 
