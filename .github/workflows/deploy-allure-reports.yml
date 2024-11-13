@@ -27,16 +27,25 @@ jobs:
           pip install -r requirements.txt  # Install dependencies
         shell: bash
 
-      - name: Install Homebrew
+#      - name: Install Homebrew
+#        run: |
+#          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+#          echo "export PATH=$HOME/.linuxbrew/bin:$PATH" >> $GITHUB_ENV
+#        shell: bash
+
+#      - name: Install Allure Commandline via Homebrew
+#        run: |
+#          brew install allure  # Install Allure via Homebrew
+#        shell: bash
+      - name: Install Allure Commandline manually
         run: |
-          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-          echo "export PATH=$HOME/.linuxbrew/bin:$PATH" >> $GITHUB_ENV
+          # Download Allure from GitHub releases
+          curl -sSL https://github.com/allure-framework/allure2/releases/download/2.19.0/allure-2.19.0.zip -o allure.zip
+          unzip allure.zip -d allure
+          sudo mv allure /opt/allure  # Move Allure to /opt for global use
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure  # Create a symbolic link to the allure binary
         shell: bash
 
-      - name: Install Allure Commandline via Homebrew
-        run: |
-          brew install allure  # Install Allure via Homebrew
-        shell: bash
 
       - name: Run tests and generate Allure report
         run: |
