@@ -1,12 +1,6 @@
 name: Deploy Allure Report to GitHub Pages
 
 on:
-#  push:
-#    branches:
-#      - main
-#  pull_request:
-#    branches:
-#      - main
   workflow_dispatch:  # Allow manual trigger of the workflow from the GitHub UI.
 
 jobs:
@@ -27,36 +21,48 @@ jobs:
           pip install -r requirements.txt  # Install dependencies
         shell: bash
 
-#      - name: Install Homebrew
-#        run: |
-#          /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-#          echo "export PATH=$HOME/.linuxbrew/bin:$PATH" >> $GITHUB_ENV
-#        shell: bash
-
-#      - name: Install Allure Commandline via Homebrew
-#        run: |
-#          brew install allure  # Install Allure via Homebrew
-#        shell: bash
+      # Install Allure Commandline manually
       - name: Install Allure Commandline manually
         run: |
           # Download Allure from GitHub releases
           curl -sSL https://github.com/allure-framework/allure2/releases/download/2.19.0/allure-2.19.0.zip -o allure.zip
           unzip allure.zip -d allure
           sudo mv allure /opt/allure  # Move Allure to /opt for global use
-          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure  # Create a symbolic link to the allure binary
+          sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure  # Create a symbolic link to allure binary
         shell: bash
 
+      # Check the Allure zip file contents
+      - name: Check Allure zip file
+        run: |
+          ls -l allure.zip  # Ensure allure.zip is downloaded
+          unzip -l allure.zip  # List contents of the zip to verify it contains the Allure binary
+        shell: bash
+
+      # Add allure path to the environment
       - name: Add allure path
         run: |
-          echo "export PATH=/opt/allure/bin:$PATH" >> $GITHUB_ENV  # Add Allure to the PATH
+          echo "export PATH=/opt/allure/bin:$PATH" >> $GITHUB_ENV  # Add Allure to PATH
         shell: bash
 
+      # Print PATH to check if Allure is in the PATH
+      - name: Print PATH for Debugging
+        run: echo $PATH
+        shell: bash
+
+      # Verify Allure installation
+      - name: Verify Allure installation
+        run: |
+          allure --version  # Check if Allure is installed correctly
+        shell: bash
+
+      # Run tests and generate Allure report
       - name: Run tests and generate Allure report
         run: |
           pytest --alluredir=allure-results  # Run tests and generate Allure results
           allure generate allure-results --clean -o allure-report  # Generate the Allure report
         shell: bash
 
+      # Deploy to GitHub Pages using peaceiris/actions-gh-pages
       - name: Deploy to GitHub Pages using peaceiris/actions-gh-pages
         uses: peaceiris/actions-gh-pages@v3
         with:
