@@ -27,16 +27,16 @@ jobs:
           pip install -r requirements.txt  # PowerShell command
         shell: pwsh  # PowerShell shell on Windows runner.
 
-#      - name: Install Allure Commandline
-#        run: |
-#          choco install allure  # PowerShell command to install Allure via Chocolatey package manager.
-#        shell: pwsh  # PowerShell shell on Windows runner.
-#
-#      - name: Run tests and generate Allure report
-#        run: |
-#          pytest --alluredir=allure-results  # PowerShell command to run tests.
-#          allure generate allure-results --clean -o allure-report  # PowerShell command to generate the Allure report.
-#        shell: pwsh  # PowerShell shell on Windows runner.
+      - name: Install Allure Commandline
+        run: |
+          choco install allure  # PowerShell command to install Allure via Chocolatey package manager.
+        shell: pwsh  # PowerShell shell on Windows runner.
+
+      - name: Run tests and generate Allure report
+        run: |
+          pytest --alluredir=allure-results  # PowerShell command to run tests.
+          allure generate allure-results --clean -o allure-report  # PowerShell command to generate the Allure report.
+        shell: pwsh  # PowerShell shell on Windows runner.
 #
 #      - name: Deploy to GitHub Pages using peaceiris/actions-gh-pages
 #        uses: peaceiris/actions-gh-pages@v3
