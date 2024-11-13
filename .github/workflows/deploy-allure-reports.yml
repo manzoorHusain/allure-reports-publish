@@ -46,6 +46,10 @@ jobs:
           sudo ln -s /opt/allure/bin/allure /usr/local/bin/allure  # Create a symbolic link to the allure binary
         shell: bash
 
+      - name: Add allure path
+        run: |
+          echo "export PATH=/opt/allure/bin:$PATH" >> $GITHUB_ENV  # Add Allure to the PATH
+        shell: bash
 
       - name: Run tests and generate Allure report
         run: |
